@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Bubble, { BubbleOptions } from './Bubble';
-import styles from './SamplePage.module.css';
+import styles from './sample.module.css';
 import { data } from './data';
 
 const SamplePage: React.FC = () => {
