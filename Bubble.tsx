@@ -1,7 +1,7 @@
 import React, {
   useRef,
   useState,
-  useLayoutEffect,
+  useEffect,
   UIEvent,
   ReactNode,
   CSSProperties,
@@ -115,18 +115,27 @@ const Bubble = forwardRef<HTMLDivElement, BubbleUIProps>(
       setScrollLeft(e.currentTarget.scrollLeft);
     };
 
-    useLayoutEffect(() => {
-      if (scrollableRef.current) {
-        scrollableRef.current.scrollTo(
-          (scrollableRef.current.scrollWidth -
-            scrollableRef.current.clientWidth) /
-            2,
-          (scrollableRef.current.scrollHeight -
-            scrollableRef.current.clientHeight) /
-            2,
-        );
-      }
-    }, []);
+    useEffect(() => {
+      const handleScrollPosition = () => {
+        if (scrollableRef.current) {
+          const x =
+            (scrollableRef.current.scrollWidth -
+              scrollableRef.current.clientWidth) /
+            2;
+          const y =
+            (scrollableRef.current.scrollHeight -
+              scrollableRef.current.clientHeight) /
+            2;
+          scrollableRef.current.scrollTo(x, y);
+          setScrollLeft(x);
+          setScrollTop(y);
+        }
+      };
+
+      const animationFrameId = requestAnimationFrame(handleScrollPosition);
+
+      return () => cancelAnimationFrame(animationFrameId);
+    }, [children]);
 
     const interpolate = (
       actualMin: number,
